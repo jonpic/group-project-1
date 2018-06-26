@@ -10,6 +10,21 @@ var config = {
 
 firebase.initializeApp(config);
 
+function searchBandsInTownEvents(events) {
+
+    // Querying the bandsintown api for the selected artist, the ?app_id parameter is required, but can equal anything
+    var queryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=band_together";
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+
+      // Printing the entire object to console
+      console.log(response);
+
+      // Constructing HTML containing the artist information
+    });
+  }
 
 function searchBandsInTown(artist) {
 
@@ -35,7 +50,23 @@ function searchBandsInTown(artist) {
       // Empty the contents of the artist-div, append the new artist content
       $("#main-container").empty();
       $("#main-container").append(mainArtistDiv);
-      $(mainArtistDiv).append(artistURL, artistImage, upcomingEvents, goToArtist)
+      $(mainArtistDiv).append(artistURL, artistImage, upcomingEvents, goToArtist);
+      
+      if (response.upcoming_event_count > 0) {
+          var newQueryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=band_together";
+          $.ajax({
+              url: newQueryURL,
+              method: "GET"
+          }).then(function(newResponse){
+              for (var i = 0; i < 4; i++){
+                  console.log(i)
+                  console.log(newResponse[i])
+                  console.log(newResponse[i].datetime)
+                  var eventDate = $("<h3>").text(newResponse[i].datetime);
+                  $(mainArtistDiv).append(eventDate);
+              }
+          })
+      }
     });
   }
 
