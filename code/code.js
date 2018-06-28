@@ -12,6 +12,11 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
+var playerURL = ""
+var bandID = ""
+var inputArtist = "tame%impala"
+var queryURL = "https://api.spotify.com/v1/search?q=" + inputArtist + "&type=artist&market=us&limit=1";
+
 //is the searchBandsInTownEvents function necessary? -carter
 
 function searchBandsInTownEvents(events) {
@@ -85,6 +90,8 @@ function searchBandsInTown(artist) {
                   //console.log(newResponse[i].datetime)
                   //console.log(newResponse[i].venue)
                   var eventDate = newResponse[i].datetime;
+                  eventDate = moment(eventDate).format("MMMM DD YYYY, h:mm a");
+
                   //$(mainArtistDiv).append(eventDate);
 
                   var venue = newResponse[i].venue.name;
@@ -92,7 +99,7 @@ function searchBandsInTown(artist) {
 
                   //console.log(newResponse[i].url)
 
-                  var upcomingVenues = $("<h3>").text("playing in " + newResponse[i].venue.city + " at the " + venue + " on " + eventDate);
+                  var upcomingVenues = $("<a>").attr("href", newResponse[i].url).html("<h3>Playing in " + newResponse[i].venue.city + " at the " + venue + " on " + eventDate);
 
 
                   //<a href="url">link text</a>
@@ -135,3 +142,54 @@ function searchBandsInTown(artist) {
 
   
   });
+
+var playerURL = ""
+var bandID = ""
+var inputArtist = "tame%impala"
+var queryURL = "https://api.spotify.com/v1/search?q=tame%20impala&type=artist&market=us&limit=1";
+
+    // Here we run our AJAX call to the OpenWeatherMap API
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    })
+      // We store all of the retrieved data inside of an object called "response"
+      .then(function(response) {
+
+        // Log the queryURL
+        bandID = response.artists.items[0].id;
+        console.log(bandID)
+        
+        var queryURL2 = "https://api.spotify.com/v1/artists/5INjqkS1o8h1imAzPqGZBb/top-tracks?country=us";
+        console.log(queryURL2)
+        // Log the resulting object
+        console.log(response);
+        $.ajax({
+            url: queryURL2,
+            method: "GET"
+          })
+            // We store all of the retrieved data inside of an object called "response"
+            .then(function(response) {
+      
+              // Log the queryURL
+              console.log(queryURL2);
+      
+              // Log the resulting object
+              console.log(response.tracks[0].preview_url);
+              playerURL = response.tracks[0].preview_url
+              var video = $('<video />', {
+                id: 'video',
+                src: playerURL,
+                type: 'video/mp4',
+                controls: true
+            });
+            video.appendTo($("body"));
+              
+            });
+      });
+
+
+    // Here we run our AJAX call to the OpenWeatherMap API
+    
+      
+      console.log(playerURL)
