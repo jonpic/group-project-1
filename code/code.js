@@ -147,11 +147,15 @@ var playerURL = ""
 var bandID = ""
 var inputArtist = "tame%impala"
 var queryURL = "https://api.spotify.com/v1/search?q=tame%20impala&type=artist&market=us&limit=1";
+var access_token = "BQCtdcWXHE-MZyfwy5oyV-j71pX5yCXPpsIZmaKctD4HmmAP-klHWfvK0c_6MCAzEs513PN85Z6EqRjayWZQeOJsbhDttshz2SNwe9qPKX094AxNG8z1SwLys9sN_bL3Uy6-MFFNM0BZi2DXJQPhDd1Mh75YtWc"
 
     // Here we run our AJAX call to the OpenWeatherMap API
     $.ajax({
       url: queryURL,
-      method: "GET"
+      headers: {
+        'Authorization': 'Bearer ' + access_token
+      },
+      
     })
       // We store all of the retrieved data inside of an object called "response"
       .then(function(response) {
@@ -193,3 +197,5 @@ var queryURL = "https://api.spotify.com/v1/search?q=tame%20impala&type=artist&ma
     
       
       console.log(playerURL)
+
+      
