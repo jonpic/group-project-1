@@ -57,7 +57,8 @@ function searchBandsInTown(artist) {
         name: response.name,
         url: response.url,
         image: response.thumb_url,
-        upcoming: response.upcoming_event_count
+        upcoming: response.upcoming_event_count,
+        video: response.tracks[0].preview_url
       };
 
       database.ref().push(recentSearch);
@@ -107,11 +108,29 @@ function searchBandsInTown(artist) {
       }
     });
   }
+  //Event handler for user clicking enter on textbox
+  var input = document.getElementById("artist-input");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function() {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Trigger the button element with a click
+    document.getElementById("find-shows").click();
+  }
+});
+
+
 
   // Event handler for user clicking the select-artist button
   $("#find-shows").on("click", function(event) {
     // Preventing the button from trying to submit the form
     event.preventDefault();
+  
+      // Trigger the button element with a click
+    
     // Storing the artist name
     
     var inputArtist = $("#artist-input").val().trim();
@@ -120,18 +139,33 @@ function searchBandsInTown(artist) {
     searchBandsInTown(inputArtist);
   });
 
-  database.ref().on("child_added", function(childSnapshot) {
+  database.ref().on("value", function(childSnapshot) {
   
-  console.log(childSnapshot.val());
+    console.log(childSnapshot.val());
+    console.log(Object.values(childSnapshot.val()), "populating")
+    console.log(Object.values(childSnapshot.val())[0].name)
 
   var recentName = childSnapshot.val().name;
   var recentURL = childSnapshot.val().url;
   var recentImage = childSnapshot.val().image;
   var recentUpcoming = childSnapshot.val().upcoming;
+ 
+
+  
+
+ 
+
 
   var recentSearchDiv = $("<div class='bg-dark' id='recent-search-div'>")
   $("#main-container").append(recentSearchDiv);
   $(recentSearchDiv).append(recentName, recentURL, recentImage, recentUpcoming);
 
-  
+
+
   });
+
+
+
+  
+
+  //
